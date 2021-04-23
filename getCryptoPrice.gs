@@ -11,8 +11,6 @@ function onOpen() {
       .addToUi();
 }
 
-var spreadsheetId = "1VffDF-XEwpz6ze4PsEAytGQETyDItJyzyCgjkxQbEsw";
-
 function getCryptoPrice(range) {
 
   var url = 'https://api.gemini.com/v1/pricefeed';
@@ -23,13 +21,15 @@ function getCryptoPrice(range) {
 
   var response = JSON.parse(UrlFetchApp.fetch(url,options));
 
-  var getCryptoValue = Sheets.Spreadsheets.Values.get(spreadsheetId, range);
-  var resultCryptoValue = getCryptoValue.values[0][0] + "USD";
-  
-  outputCrypto = response.find(response => response.pair == resultCryptoValue )
-  // Logger.log(outputCrypto);
-  finalResult = outputCrypto.price;
-  Logger.log(finalResult);
+  var getCryptoName = SpreadsheetApp.getActiveSpreadsheet().getRange(range).getValues();
+  var outputCryptoName = getCryptoName + "USD";
+  // Logger.log(outputCryptoName);
+
+  outputCryptoPrice = response.find(response => response.pair == outputCryptoName )
+  // Logger.log(outputCryptoPrice);
+
+  finalResult = outputCryptoPrice.price;
+  // Logger.log(finalResult);
 
   return finalResult;
 }
